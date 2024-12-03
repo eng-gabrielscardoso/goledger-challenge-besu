@@ -9,9 +9,10 @@ To accomplish that, we recommend you use a UNIX-like machine (Linux/macOS). Besi
 - Install NPM and NPX (https://www.npmjs.com/get-npm)
 - Install Hardhat (https://hardhat.org/getting-started/)
 - Install Docker and Docker Compose (https://www.docker.com/)
+- Install JQ (https://github.com/jqlang/jq)
 - Install Besu (https://besu.hyperledger.org/private-networks/get-started/install/binary-distribution)
 - Install Go (https://golang.org/dl/)
-- Fork the repository https://github.com/goledgerdev/goledger-challenge-besu 
+- Fork the repository https://github.com/goledgerdev/goledger-challenge-besu
     - Fork it, do **NOT** clone it, since you will need to send us your forked repository
 	- If you cannot fork it, create a private repository and give access to `samuelvenzi` and `Tubar2`
 
