@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"log/slog"
+	"os"
 	"strings"
 	"time"
 
@@ -52,7 +53,7 @@ func ExecContract() {
 		client,
 	)
 
-	priv, err := crypto.HexToECDSA("REPLACE: private key")
+	priv, err := crypto.HexToECDSA(os.Getenv("SIMPLE_STORAGE_PRIVATE_KEY"))
 	if err != nil {
 		log.Fatalf("error loading private key: %v", err)
 	}
@@ -62,7 +63,7 @@ func ExecContract() {
 		log.Fatalf("error creating transactor: %v", err)
 	}
 
-	tx, err := boundContract.Transact(auth, "REPLACE: method name")
+	tx, err := boundContract.Transact(auth, "methodName")
 	if err != nil {
 		log.Fatalf("error transacting: %v", err)
 	}

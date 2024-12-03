@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -16,25 +17,25 @@ import (
 func CallContract() {
 	var result interface{}
 
-	abi, err := abi.JSON(strings.NewReader("REPLACE: abi JSON as string goes here"))
+	abi, err := abi.JSON(strings.NewReader(os.Getenv("SIMPLE_STORAGE_ABI")))
 
 	if err != nil {
-		log.Fatalf("error parsing abi: %v", err)
+		log.Fatalf("Error parsing abi: %v", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
 	defer cancel()
 
-	client, err := ethclient.DialContext(ctx, "REPLACE: network URL")
+	client, err := ethclient.DialContext(ctx, os.Getenv("SIMPLE_STORAGE_NETWORK_URL"))
 
 	if err != nil {
-		log.Fatalf("error connecting to eth client: %v", err)
+		log.Fatalf("Error connecting to eth client: %v", err)
 	}
 
 	defer client.Close()
 
-	contractAddress := common.HexToAddress("REPLACE: contract address")
+	contractAddress := common.HexToAddress(os.Getenv("SIMPLE_STORAGE_CONTRACT_ADDRESS"))
 
 	caller := bind.CallOpts{
 		Pending: false,
@@ -51,10 +52,10 @@ func CallContract() {
 
 	var output []interface{}
 
-	err = boundContract.Call(&caller, &output, "REPLACE: method name")
+	err = boundContract.Call(&caller, &output, "methodName")
 
 	if err != nil {
-		log.Fatalf("error calling contract: %v", err)
+		log.Fatalf("Error calling contract: %v", err)
 	}
 
 	result = output
