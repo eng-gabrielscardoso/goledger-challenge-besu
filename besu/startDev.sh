@@ -16,11 +16,22 @@ if ! npx --no-install hardhat > /dev/null 2>&1; then
   exit 1
 fi
 
+# Check local docker compose
+if [ -x "$(command -v docker-compose)" ]; then
+  LOCAL_COMPOSE="docker-compose"
+  echo "Using compose: docker-compose"
+elif $(docker compose &>/dev/null) && [ $? -eq 0 ]; then
+  LOCAL_COMPOSE="docker compose"
+  echo "Using compose: docker compose"
+else
+  echo "ERROR: neither \"docker-compose\" nor \"docker compose\" appear to be installed."
+  exit 1;
+fi
 
 echo "Cleaning up previous data"
 
 # Clean up containers
-docker rm -f besu-node-0 besu-node-1 besu-node-2 besu-node-3 
+docker rm -f besu-node-0 besu-node-1 besu-node-2 besu-node-3
 
 # Clean up data dir from each node
 rm -rf node/besu-0/data
@@ -84,7 +95,7 @@ if ! docker network ls | grep -q besu_network; then
 fi
 
 echo "Starting bootnode"
-docker-compose -f docker/docker-compose-bootnode.yaml up -d
+$LOCAL_COMPOSE -f docker/docker-compose-bootnode.yaml up -d
 
 # Retrieve bootnode enode address
 max_retries=30
@@ -120,7 +131,7 @@ echo $E_ADDRESS
 sed "s/<ENODE>/enode:\/\/$E_ADDRESS/g" docker/templates/docker-compose-nodes.yaml > docker/docker-compose-nodes.yaml
 
 echo "Starting nodes"
-docker-compose -f docker/docker-compose-nodes.yaml up -d
+$LOCAL_COMPOSE -f docker/docker-compose-nodes.yaml up -d
 
 echo "============================="
 echo "Network started successfully!"
