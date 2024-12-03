@@ -10,6 +10,8 @@ import (
 func main() {
 	config.LoadEnv()
 
+	config.LoadDatabaseConnection()
+
 	router := routes.SetupRouter()
 
 	if err := router.Run(); err != nil {
