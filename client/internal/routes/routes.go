@@ -11,7 +11,9 @@ func SetupRouter() *gin.Engine {
 
 	router.GET("ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+			"data": gin.H{
+				"message": "pong",
+			},
 		})
 	})
 
