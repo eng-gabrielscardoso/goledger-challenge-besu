@@ -108,6 +108,24 @@ In the end, you will be able to enjoy the operations through the client's HTTP c
 
 Any more specific issues? Please open an issue or contact the developer so we can take a look at the problem! 😉
 
+## Architecture
+
+```mermaid
+graph LR
+  Besu[Besu Network] --> Hardhat[Hardhat]
+  Hardhat --> Contract[Contract]
+  Client[Client] --> Contract
+  Client --> Postgres[PostgreSQL]
+```
+
+The application architecture is quite simple, consisting of an infrastructure made with Besu network where a smart contract developed with Solidity and Hardhat is deployed through the Besu network called `SimpleStorage`.
+
+This contract exposes some functions to be consumed through the REST Client through HTTP calls. Some of its operations can interact with a PostgreSQL database to store some data from the state stored in the blockchain.
+
+All interactions with database were made using an ORM (object relational mapping) to abstract the SQL and concentrate in Go language. The main entity is the `transaction` that is all about the representation of the state of `SimpleStorage` state in blockchain.
+
+In summary this is all about architecture of application.
+
 ## Author
 
 This project is authorised by [Gabriel Santos Cardoso](https://gabrielscardoso.com) as part of [Goledger Challenge Besu](https://github.com/GoLedgerDev/goledger-challenge-besu).
