@@ -14,7 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func CallContract() {
+func CallContract(method string) {
 	var result interface{}
 
 	abi, err := abi.JSON(strings.NewReader(os.Getenv("SIMPLE_STORAGE_ABI")))
@@ -52,7 +52,7 @@ func CallContract() {
 
 	var output []interface{}
 
-	err = boundContract.Call(&caller, &output, "methodName")
+	err = boundContract.Call(&caller, &output, method)
 
 	if err != nil {
 		log.Fatalf("Error calling contract: %v", err)

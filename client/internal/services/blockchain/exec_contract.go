@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"log/slog"
+	"math/big"
 	"os"
 	"strings"
 	"time"
@@ -16,8 +17,8 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func ExecContract() {
-	abi, err := abi.JSON(strings.NewReader("REPLACE: abi JSON as string goes here"))
+func ExecContract(method string, value uint64) {
+	abi, err := abi.JSON(strings.NewReader(os.Getenv("SIMPLE_STORAGE_ABI")))
 
 	if err != nil {
 		log.Fatal(err)
@@ -27,7 +28,7 @@ func ExecContract() {
 
 	defer cancel()
 
-	client, err := ethclient.DialContext(ctx, "REPLACE: network URL")
+	client, err := ethclient.DialContext(ctx, os.Getenv("SIMPLE_STORAGE_NETWORK_URL"))
 
 	if err != nil {
 		log.Fatalf("error dialing node: %v", err)
@@ -43,7 +44,7 @@ func ExecContract() {
 
 	defer client.Close()
 
-	contractAddress := common.HexToAddress("REPLACE: contract address")
+	contractAddress := common.HexToAddress(os.Getenv("SIMPLE_STORAGE_CONTRACT_ADDRESS"))
 
 	boundContract := bind.NewBoundContract(
 		contractAddress,
@@ -63,7 +64,7 @@ func ExecContract() {
 		log.Fatalf("error creating transactor: %v", err)
 	}
 
-	tx, err := boundContract.Transact(auth, "methodName")
+	tx, err := boundContract.Transact(auth, method, big.NewInt((int64(value))))
 	if err != nil {
 		log.Fatalf("error transacting: %v", err)
 	}
