@@ -1,3 +1,45 @@
+# Simple PING method to check the client health
+
 GET http://localhost:8080/ping
+Accept: application/json
+Content-Type: application/json
 
 ###
+
+# Retrieve the current value of the smart contract variable from the blockchain
+
+GET http://localhost:8080/simple-storage
+Accept: application/json
+Content-Type: application/json
+
+###
+
+# Set a new value for the smart contract variable
+
+# The application should send this value to the deployed smart contract on the Besu network
+
+POST http://localhost:8080/simple-storage
+Accept: application/json
+Content-Type: application/json
+
+{
+  "value": 5
+}
+
+###
+
+# Synchronize the value of the smart contract variable from the blockchain to the SQL database
+
+POST http://localhost:8080/simple-storage/sync
+Accept: application/json
+Content-Type: application/json
+
+###
+
+# Compare the value stored in the database with the current value of the smart contract variable
+
+# Return `true` if they are the same, otherwise return `false`
+
+POST http://localhost:8080/simple-storage/check
+Accept: application/json
+Content-Type: application/json
