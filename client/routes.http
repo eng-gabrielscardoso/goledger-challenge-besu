@@ -23,7 +23,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "value": 5
+  "value": 1
 }
 
 ###
