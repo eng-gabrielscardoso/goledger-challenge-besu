@@ -2,20 +2,21 @@ package blockchain
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"math/big"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/eng-gabrielscardoso/goledger-challenge-besu/pkg/utils"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func CallContract(method string) {
-	var result interface{}
+func CallContract(method string) *big.Int {
+	var result *big.Int
 
 	abi, err := abi.JSON(strings.NewReader(os.Getenv("SIMPLE_STORAGE_ABI")))
 
@@ -58,7 +59,17 @@ func CallContract(method string) {
 		log.Fatalf("Error calling contract: %v", err)
 	}
 
-	result = output
+	if len(output) > 0 {
+		if val, ok := output[0].(*big.Int); ok {
+			result = val
+		} else {
+			log.Fatalf("Unexpected output type: %v", output[0])
+		}
+	} else {
+		log.Fatalf("No output returned from contract call")
+	}
 
-	fmt.Println("Successfully called contract!", result)
+	utils.Logger.Printf("Successfully called contract with result: %v", result)
+
+	return result
 }

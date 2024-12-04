@@ -2,7 +2,6 @@ package blockchain
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"log/slog"
 	"math/big"
@@ -10,14 +9,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/eng-gabrielscardoso/goledger-challenge-besu/pkg/utils"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func ExecContract(method string, value uint64) {
+func ExecContract(method string, value *big.Int) *types.Receipt {
 	abi, err := abi.JSON(strings.NewReader(os.Getenv("SIMPLE_STORAGE_ABI")))
 
 	if err != nil {
@@ -64,12 +65,12 @@ func ExecContract(method string, value uint64) {
 		log.Fatalf("error creating transactor: %v", err)
 	}
 
-	tx, err := boundContract.Transact(auth, method, big.NewInt((int64(value))))
+	tx, err := boundContract.Transact(auth, method, value)
 	if err != nil {
 		log.Fatalf("error transacting: %v", err)
 	}
 
-	fmt.Println("waiting until transaction is mined",
+	utils.Logger.Print("Wail until transaction is mined",
 		"tx", tx.Hash().Hex(),
 	)
 
@@ -83,5 +84,7 @@ func ExecContract(method string, value uint64) {
 		log.Fatalf("error waiting for transaction to be mined: %v", err)
 	}
 
-	fmt.Printf("transaction mined: %v\n", receipt)
+	utils.Logger.Printf("Transaction mined: %v\n", receipt)
+
+	return receipt
 }
