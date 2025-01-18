@@ -2,7 +2,7 @@
 
 # GoLedger Challenge - Besu Client
 
-![Main technologies](https://go-skill-icons.vercel.app/api/icons?i=go,postgres,docker,github,vscode,linux)
+![Main technologies](https://go-skill-icons.vercel.app/api/icons?i=go,gin,postgres,docker,github,vscode,linux)
 
 Simple HTTP REST API client to interact with a Besu blockchain network and an SQL database implemented in Golang that exposes functionalities as REST API.
 
